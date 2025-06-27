@@ -1,27 +1,61 @@
-import { Box, VStack, IconButton, Image, Spacer } from "@chakra-ui/react";
-import { FiMessageSquare, FiUser, FiSettings } from "react-icons/fi";
-import { IoMdMail } from "react-icons/io";
-import { MdOutlineBookmark } from "react-icons/md";
-import { FaMessage } from "react-icons/fa6";
-import { FaBookmark, FaUser } from "react-icons/fa";
-import { TiCloudStorage } from "react-icons/ti";
-import { SiGooglecloudstorage } from "react-icons/si";
+import { Box, VStack, IconButton, useColorMode } from "@chakra-ui/react";
+import { FiSettings } from "react-icons/fi";
+import { FaMessage, FaBookmark, FaUser } from "react-icons/fa6";
+import colors from "@/theme/colors";
+import { useSidebarStore } from "@/store/useSidebarStore";
 
 export default function Sidebar() {
-  return (
-    <Box w="80px" h="100vh" bg="layout.sidebar" color="white" display="flex" flexDirection="column" alignItems="center" py={4}>
-      {/* Logo */}
+  const { colorMode } = useColorMode();
+  const currentColors = colorMode === "light" ? colors.light : colors.dark;
 
-      {/* Icons */}
+  const activeSection = useSidebarStore((s) => s.activeSection);
+  const setActiveSection = useSidebarStore((s) => s.setActiveSection);
+
+  const activeIconColor = currentColors.accent.blue;
+  const inactiveIconColor = currentColors.accent.deactive;
+
+  return (
+    <Box w="80px" h="100vh" bg={currentColors.layout.sidebar} display="flex" flexDirection="column" alignItems="center" py={4}>
       <VStack spacing={4} flex={1}>
-        <IconButton icon={<FaMessage />} aria-label="Chats" variant="ghost" fontSize="24px" color="accent.blue" _hover={{ color: "accent.blue" }} />
-        <IconButton icon={<FaBookmark />} aria-label="Contacts" variant="ghost" fontSize="24px" color="accent.deactive" _hover={{ color: "accent.blue" }} />
-        <IconButton icon={<FaUser />} aria-label="Contacts" variant="ghost" fontSize="24px" color="accent.deactive" _hover={{ color: "accent.blue" }} />
+        <IconButton
+          icon={<FaMessage />}
+          aria-label="Chats"
+          variant="ghost"
+          fontSize="24px"
+          onClick={() => setActiveSection("chats")}
+          color={activeSection === "chats" ? activeIconColor : inactiveIconColor}
+          _hover={{ color: activeIconColor }}
+        />
+        <IconButton
+          icon={<FaBookmark />}
+          aria-label="Bookmarks"
+          variant="ghost"
+          fontSize="24px"
+          onClick={() => setActiveSection("bookmarks")}
+          color={activeSection === "bookmarks" ? activeIconColor : inactiveIconColor}
+          _hover={{ color: activeIconColor }}
+        />
+        <IconButton
+          icon={<FaUser />}
+          aria-label="Contacts"
+          variant="ghost"
+          fontSize="24px"
+          onClick={() => setActiveSection("contacts")}
+          color={activeSection === "contacts" ? activeIconColor : inactiveIconColor}
+          _hover={{ color: activeIconColor }}
+        />
       </VStack>
 
-      {/* Bottom Settings */}
       <Box mb={2}>
-        <IconButton icon={<FiSettings />} aria-label="Settings" variant="ghost" fontSize="22px" color="accent.deactive" _hover={{ color: "accent.blue" }} />
+        <IconButton
+          icon={<FiSettings />}
+          aria-label="Settings"
+          variant="ghost"
+          fontSize="22px"
+          onClick={() => setActiveSection("settings")}
+          color={activeSection === "settings" ? activeIconColor : inactiveIconColor}
+          _hover={{ color: activeIconColor }}
+        />
       </Box>
     </Box>
   );
