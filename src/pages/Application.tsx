@@ -1,5 +1,5 @@
-import React from "react";
+import DesktopLayout from "@/layouts/desktop/DesktopLayout";
 
 export default function Application() {
-  return <div>Application</div>;
+  return <DesktopLayout />;
 }
