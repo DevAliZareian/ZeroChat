@@ -4,7 +4,7 @@ import { Input, Button, FormControl, FormErrorMessage } from "@chakra-ui/react";
 
 const LoginSchema = Yup.object({
   email: Yup.string().email("Invalid email").required("Required"),
-  password: Yup.string().min(6, "Min 6 characters").required("Required"),
+  password: Yup.string().min(8, "Min 8 characters").required("Required"),
 });
 
 export default function LoginForm() {

@@ -1,10 +1,15 @@
-// src/router/index.tsx
 import { createBrowserRouter } from "react-router-dom";
-import Login from "../pages/Login";
+
+import AuthPage from "@/pages/AuthPage";
+import Application from "@/pages/Application";
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <Login />,
+    element: <AuthPage />,
+  },
+  {
+    path: "/app",
+    element: <Application />,
   },
 ]);
