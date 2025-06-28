@@ -2,7 +2,7 @@ import { create } from "zustand";
 
 type ConversationStore = {
   selectedId: string | null;
-  setSelectedId: (id: string) => void;
+  setSelectedId: (id: string | null) => void;
 };
 
 export const useConversationStore = create<ConversationStore>((set) => ({

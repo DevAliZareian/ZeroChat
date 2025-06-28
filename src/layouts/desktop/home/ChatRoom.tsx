@@ -2,10 +2,12 @@ import { Box, Flex, HStack, Input, IconButton, Text, VStack, Avatar, useColorMod
 import { FiSend } from "react-icons/fi";
 import { InputGroup, InputLeftElement } from "@chakra-ui/react";
 import { FiSearch } from "react-icons/fi";
-import { IoIosSend, IoMdSend } from "react-icons/io";
+import { IoIosCloseCircleOutline, IoIosSend, IoMdClose, IoMdSend } from "react-icons/io";
 import colors from "@/theme/colors";
+import { useNavigate } from "react-router-dom";
 
 export default function ChatRoom({ chatId }: { chatId: any }) {
+  const navigate = useNavigate();
   const { colorMode } = useColorMode();
   const currentColors = colorMode === "light" ? colors.light : colors.dark;
   return (
@@ -13,27 +15,40 @@ export default function ChatRoom({ chatId }: { chatId: any }) {
       {/* ===== HEADER ===== */}
       <Box px={6} py={4} borderBottom="1px solid" borderColor={currentColors.layout.border}>
         {/* === Search Input === */}
-        <InputGroup mb={4}>
-          <InputLeftElement pointerEvents="none">
-            <FiSearch color={currentColors.text.secondary} />
-          </InputLeftElement>
+        <Flex align="center" mb={4} gap={3}>
+          <InputGroup flex="1">
+            <InputLeftElement pointerEvents="none">
+              <FiSearch color={currentColors.text.secondary} />
+            </InputLeftElement>
 
-          <Input
-            placeholder="Search in chat"
-            variant="filled"
-            bg={currentColors.layout.surface}
-            _hover={{ bg: currentColors.layout.surface }}
-            _focus={{
-              bg: currentColors.layout.surface,
-              borderColor: currentColors.accent.blue,
+            <Input
+              placeholder="Search in chat"
+              variant="filled"
+              bg={currentColors.layout.surface}
+              _hover={{ bg: currentColors.layout.surface }}
+              _focus={{
+                bg: currentColors.layout.surface,
+                borderColor: currentColors.accent.blue,
+              }}
+              borderRadius="full"
+              size="md"
+              color={currentColors.text.primary}
+              border="1px solid"
+              borderColor={currentColors.layout.border}
+            />
+          </InputGroup>
+
+          <IconButton
+            icon={<IoIosCloseCircleOutline size={36} />}
+            aria-label="Clear search"
+            variant="ghost"
+            size="sm"
+            rounded={"full"}
+            onClick={() => {
+              navigate("/app");
             }}
-            borderRadius="full"
-            size="md"
-            color={currentColors.text.primary}
-            border="1px solid"
-            borderColor={currentColors.layout.border}
           />
-        </InputGroup>
+        </Flex>
 
         {/* === Chat With Title === */}
         <Text fontSize="sm" color={currentColors.text.secondary}>

@@ -1,4 +1,4 @@
-import { useConversationStore } from "@/store/conversationStore";
+import { useConversationStore } from "@/store/useConversationStore";
 import colors from "@/theme/colors";
 import {
   Avatar,
@@ -69,6 +69,8 @@ export default function Contacts() {
   useEffect(() => {
     if (id && selectedId !== id) {
       setSelectedId(id);
+    } else if (!id && selectedId !== null) {
+      setSelectedId(null);
     }
   }, [id]);
 
