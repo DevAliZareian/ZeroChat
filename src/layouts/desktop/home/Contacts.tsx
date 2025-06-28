@@ -1,3 +1,4 @@
+import { useConversationStore } from "@/store/conversationStore";
 import colors from "@/theme/colors";
 import {
   Avatar,
@@ -19,9 +20,10 @@ import {
   MenuList,
   MenuItem,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaGlobe, FaInstagram, FaTwitter } from "react-icons/fa";
 import { FiInstagram, FiTwitter, FiSearch, FiGlobe, FiLink, FiTrash2 } from "react-icons/fi";
+import { useNavigate, useParams } from "react-router-dom";
 
 // fake data
 const onlineFriends = [
@@ -33,7 +35,7 @@ const onlineFriends = [
 
 const conversations = [
   {
-    id: 1,
+    id: "1",
     name: "Ali Zareian",
     lastMessage: "See you at 8!",
     time: "12:45",
@@ -41,7 +43,7 @@ const conversations = [
     isOnline: true,
   },
   {
-    id: 2,
+    id: "2",
     name: "Karimi",
     lastMessage: "Got the file",
     time: "11:10",
@@ -51,13 +53,24 @@ const conversations = [
 ];
 
 export default function Contacts() {
+  const navigate = useNavigate();
+
+  const { id } = useParams();
+  const { selectedId, setSelectedId } = useConversationStore();
+
   const [contextMenu, setContextMenu] = useState<{
     x: number;
     y: number;
     chatId: string | null;
   } | null>(null);
 
-  const { onCopy } = useClipboard(`${window.location.origin}/chat/${contextMenu?.chatId}`); // Will update with actual chat URL
+  const { onCopy } = useClipboard(`${window.location.origin}/chat/${contextMenu?.chatId}`);
+
+  useEffect(() => {
+    if (id && selectedId !== id) {
+      setSelectedId(id);
+    }
+  }, [id]);
 
   const handleRightClick = (e: React.MouseEvent, chatId: string) => {
     e.preventDefault();
@@ -135,7 +148,19 @@ export default function Contacts() {
         {/* === CHAT LIST === */}
         <VStack spacing={3} align="stretch">
           {conversations.map((chat) => (
-            <Box key={chat.id} onContextMenu={(e) => handleRightClick(e, String(chat.id))} _hover={{ bg: useColorModeValue("gray.100", "gray.700") }} p={2} borderRadius="md" cursor="pointer">
+            <Box
+              key={chat.id}
+              onClick={() => {
+                setSelectedId(chat.id);
+                navigate(`/app/chat/${chat.id}`);
+              }}
+              onContextMenu={(e) => handleRightClick(e, String(chat.id))}
+              bg={selectedId === chat.id ? useColorModeValue("blue.100", "blue.700") : "transparent"}
+              _hover={{ bg: selectedId === chat.id ? useColorModeValue("blue.100", "blue.700") : useColorModeValue("gray.100", "gray.700") }}
+              p={2}
+              borderRadius="md"
+              cursor="pointer"
+            >
               <HStack spacing={3} align="start">
                 <Box position="relative">
                   <Avatar size="md" src={chat.avatar} name={chat.name} />
@@ -181,8 +206,7 @@ export default function Contacts() {
               <MenuItem
                 icon={<FiLink size={16} />}
                 onClick={() => {
-                  const chatUrl = `${window.location.origin}/chat/${contextMenu.chatId}`;
-                  navigator.clipboard.writeText(chatUrl);
+                  onCopy();
                   handleCloseMenu();
                 }}
               >

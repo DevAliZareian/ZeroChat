@@ -6,10 +6,10 @@ import { HiOutlineDotsVertical } from "react-icons/hi";
 import { AddFriendDialog } from "./AddFriendDialog";
 
 const mockFriends = [
-  { name: "! A ⚒️ RZIX(OLD)", status: "offline", avatar: "", id: 1 },
-  { name: "! Elijah", status: "offline", avatar: "", id: 2 },
-  { name: "Aiden", status: "offline", avatar: "", id: 3 },
-  { name: "alireza123", status: "offline", avatar: "", id: 4 },
+  { name: "Dapsh Levi", status: "offline", avatar: "", id: 1 },
+  { name: "Diff Seyed", status: "offline", avatar: "", id: 2 },
+  { name: "Siza", status: "online", avatar: "", id: 3 },
+  { name: "Byco", status: "offline", avatar: "", id: 4 },
 ];
 
 export default function FriendsList() {
