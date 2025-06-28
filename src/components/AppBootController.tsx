@@ -8,7 +8,7 @@ export default function AppBootController() {
     const timeout = setTimeout(() => {
       // replace this with auth check, API call, animation, etc.
       setReady();
-    }, 8000); // Fake boot delay
+    }, 0); // Fake boot delay
 
     return () => clearTimeout(timeout);
   }, [setReady]);

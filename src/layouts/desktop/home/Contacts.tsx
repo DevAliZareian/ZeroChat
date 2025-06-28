@@ -1,28 +1,8 @@
 import { useConversationStore } from "@/store/useConversationStore";
 import colors from "@/theme/colors";
-import {
-  Avatar,
-  AvatarGroup,
-  Box,
-  HStack,
-  Icon,
-  Input,
-  InputGroup,
-  InputLeftElement,
-  Text,
-  VStack,
-  Divider,
-  useColorMode,
-  useColorModeValue,
-  useClipboard,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-} from "@chakra-ui/react";
+import { Avatar, AvatarGroup, Box, HStack, Input, InputGroup, InputLeftElement, Text, VStack, Divider, useColorMode, useClipboard, Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { FaGlobe, FaInstagram, FaTwitter } from "react-icons/fa";
-import { FiInstagram, FiTwitter, FiSearch, FiGlobe, FiLink, FiTrash2 } from "react-icons/fi";
+import { FiSearch, FiGlobe, FiLink, FiTrash2 } from "react-icons/fi";
 import { useNavigate, useParams } from "react-router-dom";
 
 // fake data
@@ -54,6 +34,7 @@ const conversations = [
 
 export default function Contacts() {
   const navigate = useNavigate();
+  const { colorMode } = useColorMode();
 
   const { id } = useParams();
   const { selectedId, setSelectedId } = useConversationStore();
@@ -85,7 +66,6 @@ export default function Contacts() {
 
   const handleCloseMenu = () => setContextMenu(null);
 
-  const { colorMode } = useColorMode();
   const currentColors = colorMode === "light" ? colors.light : colors.dark;
 
   return (
@@ -94,19 +74,17 @@ export default function Contacts() {
         {/* === USER PROFILE === */}
         <VStack spacing={2} mb={6} position="relative">
           <Box position="relative">
-            <Avatar size="xl" name="Bomb Ali" src="/avatars/user.png" />
+            <Avatar size="xl" name="Bomb Ali" src="/avatars/user.png" border={`1px solid ${currentColors.layout.border}`} />
 
             {/* Green online dot */}
-            <Box position="absolute" bottom="4px" right="10px" boxSize="14px" bg="green.400" border={`2px solid ${currentColors.layout.surface}`} borderRadius="full" />
+            <Box position="absolute" bottom="4px" right="10px" boxSize="14px" bg={currentColors.accent.blue} border={`2px solid ${currentColors.layout.surface}`} borderRadius="full" />
           </Box>
 
           <Text fontWeight="bold">Bomb Ali</Text>
 
-          <HStack spacing={3} color={currentColors.text.secondary}>
-            <Icon as={FaGlobe} boxSize={4} />
-            <Icon as={FaInstagram} boxSize={4} />
-            <Icon as={FaTwitter} boxSize={4} />
-          </HStack>
+          <Text fontSize="sm" color={currentColors.text.secondary} textAlign="center" px={4}>
+            Product designer @ASPCreative • Coffee nerd • Always sketching
+          </Text>
         </VStack>
 
         <Divider mb={4} />
@@ -157,8 +135,6 @@ export default function Contacts() {
                 navigate(`/app/chat/${chat.id}`);
               }}
               onContextMenu={(e) => handleRightClick(e, String(chat.id))}
-              bg={selectedId === chat.id ? useColorModeValue("blue.100", "blue.700") : "transparent"}
-              _hover={{ bg: selectedId === chat.id ? useColorModeValue("blue.100", "blue.700") : useColorModeValue("gray.100", "gray.700") }}
               p={2}
               borderRadius="md"
               cursor="pointer"
@@ -166,12 +142,14 @@ export default function Contacts() {
               <HStack spacing={3} align="start">
                 <Box position="relative">
                   <Avatar size="md" src={chat.avatar} name={chat.name} />
-                  {chat.isOnline && <Box position="absolute" bottom="2px" right="2px" boxSize="10px" bg="green.400" border={`2px solid ${currentColors.layout.surface}`} borderRadius="full" />}
+                  {chat.isOnline && (
+                    <Box position="absolute" bottom="2px" right="2px" boxSize="10px" bg={currentColors.accent.blue} border={`2px solid ${currentColors.layout.surface}`} borderRadius="full" />
+                  )}
                 </Box>
 
                 <Box flex="1">
                   <HStack justify="space-between">
-                    <Text fontWeight="bold" fontSize="sm">
+                    <Text fontWeight="bold" fontSize="sm" color={selectedId === chat.id ? currentColors.accent.blue : currentColors.text.primary}>
                       {chat.name}
                     </Text>
                     <Text fontSize="xs" color={currentColors.text.secondary}>

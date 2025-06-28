@@ -12,6 +12,31 @@ const mockFriends = [
   { name: "Byco", status: "offline", avatar: "", id: 4 },
 ];
 
+type FriendRequest = {
+  id: string;
+  name: string;
+  email: string;
+  avatar: string;
+  status: "incoming" | "sent";
+};
+
+const friendRequests: FriendRequest[] = [
+  {
+    id: "1",
+    name: "Fardin",
+    email: "fardin@gmail.com",
+    avatar: "",
+    status: "incoming",
+  },
+  {
+    id: "2",
+    name: "Pixcell",
+    email: "Pixcell@gmail.com",
+    avatar: "",
+    status: "sent",
+  },
+];
+
 export default function FriendsList() {
   const { colorMode } = useColorMode();
   const inputBg = useColorModeValue("#f1f1f1", "gray.800");
@@ -26,9 +51,19 @@ export default function FriendsList() {
     <>
       <Box px={4} py={5} bg={useColorModeValue("#ffffff", "#1e1e1e")} h="100%" overflowY="auto">
         <Flex mb={4} align="center" justify="space-between">
-          <Heading size="sm" fontWeight="semibold" color="text.primary">
-            Friends
-          </Heading>
+          <Flex align="center" justify="space-between" gap={3}>
+            <Heading size="sm" fontWeight="semibold" color="text.primary">
+              Friends
+            </Heading>
+
+            {friendRequests.filter((user) => user.status === "incoming").length > 0 && (
+              <Text fontSize="sm" color={currentColors.accent.blue} cursor="pointer" onClick={onOpen}>
+                You have {friendRequests.filter((user) => user.status === "incoming").length} new friend request
+                {friendRequests.filter((user) => user.status === "incoming").length > 1 ? "s" : ""}
+              </Text>
+            )}
+          </Flex>
+
           <HStack spacing={2}>
             <Button size="sm" variant="ghost">
               Online
@@ -36,7 +71,7 @@ export default function FriendsList() {
             <Button size="sm" variant="ghost">
               All
             </Button>
-            <Button size="sm" color="white" colorScheme="blue" bg={currentColors.accent.blue} onClick={onOpen}>
+            <Button size="sm" color={colorMode === "dark" ? "#2B2B2B" : "white"} colorScheme="blue" bg={currentColors.accent.blue} onClick={onOpen}>
               Add Friend
             </Button>
           </HStack>
@@ -65,7 +100,7 @@ export default function FriendsList() {
 
         <VStack align="stretch" spacing={2}>
           {mockFriends.map((friend) => (
-            <HStack key={friend.id} justify="space-between" py={2} px={0} rounded="md" _hover={{ bg: useColorModeValue("gray.100", "gray.700") }}>
+            <HStack key={friend.id} justify="space-between" py={2} px={0} rounded="md" cursor={"pointer"}>
               <HStack spacing={3}>
                 <Avatar name={friend.name} size="sm" />
                 <Box>
@@ -83,7 +118,7 @@ export default function FriendsList() {
           ))}
         </VStack>
       </Box>
-      <AddFriendDialog isOpen={isOpen} onClose={onClose} />
+      <AddFriendDialog isOpen={isOpen} onClose={onClose} friendRequests={friendRequests} />
     </>
   );
 }

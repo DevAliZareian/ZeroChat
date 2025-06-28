@@ -3,7 +3,7 @@ import "@fontsource/plus-jakarta-sans/latin.css";
 import colors from "./colors";
 
 const config: ThemeConfig = {
-  initialColorMode: "light",
+  initialColorMode: "dark",
   useSystemColorMode: false,
 };
 

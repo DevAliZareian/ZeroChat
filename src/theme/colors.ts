@@ -23,24 +23,35 @@ const colors = {
   },
   dark: {
     layout: {
-      background: "#1a1a1a",
-      surface: "#2a2a2a",
-      border: "#444444",
-      sidebar: "#2a2a2a",
+      background: "#121212", // Deeper base for better contrast
+      surface: "#1e1e1e", // Slightly lighter than background
+      border: "#3d3d3d", // Softer border color
+      sidebar: "#252525", // Distinct from main surface
     },
     text: {
-      primary: "#f1f1f1",
-      secondary: "#b0b0b0",
-      muted: "#777777",
-      links: "#8A90D6ff",
+      primary: "#ffffff", // Pure white for best readability
+      secondary: "#cccccc", // Higher contrast than before
+      muted: "#888888", // Clearly visible but subtle
+      links: "#9aa5ff", // Softer blue with better visibility
     },
     chat: {
-      incoming: "#3A3B4F",
-      outgoing: "#4A4B5F",
+      incoming: "linear-gradient(135deg, #1e202c, #2a2d3a)", // dark neutral
+      outgoing: "linear-gradient(135deg, #353856, #3e435e)", // subtle depth
     },
     accent: {
-      blue: "#6D73D6ff",
-      deactive: "#4A4B5F",
+      blue: "#76FF03", // More vibrant blue
+      deactive: "#5a5d72", // Better differentiation from active
+    },
+    // Added new categories for completeness:
+    state: {
+      hover: "#2e2e2e",
+      active: "#3a3a3a",
+      focus: "#4a4a4a",
+    },
+    special: {
+      error: "#ff6b6b",
+      success: "#66bb6a",
+      warning: "#ffa726",
     },
   },
 };

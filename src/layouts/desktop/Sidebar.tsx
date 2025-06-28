@@ -1,11 +1,15 @@
 import { Box, VStack, IconButton, useColorMode } from "@chakra-ui/react";
-import { FiSettings } from "react-icons/fi";
+import { FiLogOut, FiSettings } from "react-icons/fi";
 import { FaMessage, FaBookmark, FaUser } from "react-icons/fa6";
 import colors from "@/theme/colors";
 import { HiUserGroup } from "react-icons/hi2";
 import { useSidebarStore } from "@/store/useSidebarStore";
+interface SidebarProps {
+  isLogoutDialogOpen: boolean;
+  onLogoutDialogOpen: () => void;
+}
 
-export default function Sidebar() {
+export default function Sidebar({ isLogoutDialogOpen, onLogoutDialogOpen }: SidebarProps) {
   const { colorMode } = useColorMode();
   const currentColors = colorMode === "light" ? colors.light : colors.dark;
 
@@ -55,6 +59,17 @@ export default function Sidebar() {
           fontSize="22px"
           onClick={() => setActiveSection("settings")}
           color={activeSection === "settings" ? activeIconColor : inactiveIconColor}
+          _hover={{ color: activeIconColor }}
+        />
+      </Box>
+      <Box>
+        <IconButton
+          icon={<FiLogOut />}
+          aria-label="Settings"
+          variant="ghost"
+          fontSize="22px"
+          onClick={() => onLogoutDialogOpen()}
+          color={isLogoutDialogOpen ? activeIconColor : inactiveIconColor}
           _hover={{ color: activeIconColor }}
         />
       </Box>

@@ -5,6 +5,7 @@ import { FiSearch } from "react-icons/fi";
 import { IoIosCloseCircleOutline, IoIosSend, IoMdClose, IoMdSend } from "react-icons/io";
 import colors from "@/theme/colors";
 import { useNavigate } from "react-router-dom";
+import { ImAttachment } from "react-icons/im";
 
 export default function ChatRoom({ chatId }: { chatId: any }) {
   const navigate = useNavigate();
@@ -44,9 +45,11 @@ export default function ChatRoom({ chatId }: { chatId: any }) {
             variant="ghost"
             size="sm"
             rounded={"full"}
+            color={currentColors.accent.blue}
             onClick={() => {
               navigate("/app");
             }}
+            bg="transparent"
           />
         </Flex>
 
@@ -54,30 +57,57 @@ export default function ChatRoom({ chatId }: { chatId: any }) {
         <Text fontSize="sm" color={currentColors.text.secondary}>
           Chat with
         </Text>
-        <Text fontWeight="bold" fontSize="lg" color={currentColors.text.primary}>
+        <Text fontWeight="bold" fontSize="lg" color={currentColors.accent.blue}>
           Dapsh Levi
         </Text>
       </Box>
 
-      {/* ===== CHAT MESSAGES ===== */}
       <VStack flex="1" px={6} py={4} spacing={4} overflowY="auto" align="stretch">
-        {/* Example incoming message */}
+        {/* Incoming */}
         <Box alignSelf="flex-start" bg={currentColors.chat.incoming} px={4} py={2} borderRadius="md" maxW="75%">
           <Text fontSize="sm" color={currentColors.text.primary}>
             Hey Travis, would you like to grab some coffee?
           </Text>
         </Box>
 
-        {/* Example outgoing message */}
+        {/* Outgoing */}
         <Box alignSelf="flex-end" bg={currentColors.chat.outgoing} px={4} py={2} borderRadius="md" maxW="75%">
           <Text fontSize="sm" color={currentColors.text.primary}>
             Sure! At 11:00?
           </Text>
         </Box>
+
+        {/* Incoming */}
+        <Box alignSelf="flex-start" bg={currentColors.chat.incoming} px={4} py={2} borderRadius="md" maxW="75%">
+          <Text fontSize="sm" color={currentColors.text.primary}>
+            That works. Want to meet at Grounded Café?
+          </Text>
+        </Box>
+
+        {/* Outgoing */}
+        <Box alignSelf="flex-end" bg={currentColors.chat.outgoing} px={4} py={2} borderRadius="md" maxW="75%">
+          <Text fontSize="sm" color={currentColors.text.primary}>
+            Perfect. I’ll be there a few minutes early.
+          </Text>
+        </Box>
+
+        {/* Incoming */}
+        <Box alignSelf="flex-start" bg={currentColors.chat.incoming} px={4} py={2} borderRadius="md" maxW="75%">
+          <Text fontSize="sm" color={currentColors.text.primary}>
+            Awesome. I’ll grab us a window seat if I get there first.
+          </Text>
+        </Box>
+
+        {/* Outgoing */}
+        <Box alignSelf="flex-end" bg={currentColors.chat.outgoing} px={4} py={2} borderRadius="md" maxW="75%">
+          <Text fontSize="sm" color={currentColors.text.primary}>
+            Sounds great. See you soon!
+          </Text>
+        </Box>
       </VStack>
 
       {/* ===== MESSAGE INPUT ===== */}
-      <HStack px={6} py={6} borderTop="1px solid" borderColor={currentColors.layout.border}>
+      <HStack px={6} py={4} borderTop="1px solid" borderColor={currentColors.layout.border}>
         <InputGroup>
           <Input
             placeholder="Type your message"
@@ -97,7 +127,7 @@ export default function ChatRoom({ chatId }: { chatId: any }) {
 
           <InputRightElement width="3rem">
             <IconButton
-              icon={<IoMdSend size={18} />}
+              icon={<ImAttachment size={18} />}
               aria-label="Send"
               variant="ghost"
               size="sm"
@@ -108,6 +138,16 @@ export default function ChatRoom({ chatId }: { chatId: any }) {
             />
           </InputRightElement>
         </InputGroup>
+        <IconButton
+          icon={<IoMdSend size={24} />}
+          aria-label="Send"
+          variant="ghost"
+          size="sm"
+          color={currentColors.accent.blue}
+          _hover={{ color: currentColors.accent.deactive }}
+          bg="transparent"
+          borderRadius="full"
+        />
       </HStack>
     </Flex>
   );

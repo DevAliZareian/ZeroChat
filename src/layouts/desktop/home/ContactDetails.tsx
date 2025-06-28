@@ -1,8 +1,25 @@
-import { Avatar, Box, Divider, Flex, HStack, Icon, Image, Text, useColorMode, VStack } from "@chakra-ui/react";
+import {
+  Avatar,
+  Box,
+  Button,
+  Divider,
+  Flex,
+  HStack,
+  Icon,
+  Image,
+  Popover,
+  PopoverArrow,
+  PopoverBody,
+  PopoverContent,
+  PopoverFooter,
+  PopoverTrigger,
+  Text,
+  useColorMode,
+  VStack,
+} from "@chakra-ui/react";
 import { FiBell, FiDribbble } from "react-icons/fi";
-import { FaTwitter, FaInstagram, FaGlobe } from "react-icons/fa";
 import colors from "@/theme/colors";
-import { IoMdNotifications } from "react-icons/io";
+import { IoPersonRemove } from "react-icons/io5";
 
 export default function ContactDetails() {
   const { colorMode } = useColorMode();
@@ -14,23 +31,45 @@ export default function ContactDetails() {
         <Text fontSize="sm" color={currentColors.text.secondary}>
           20 March 2021
         </Text>
-        <IoMdNotifications size={20} color={currentColors.text.secondary} />
+
+        <Popover placement="bottom" isLazy>
+          <PopoverTrigger>
+            <IoPersonRemove size={16} color={currentColors.text.secondary} cursor={"pointer"} />
+          </PopoverTrigger>
+
+          <PopoverContent bg={colorMode === "dark" ? "gray.800" : "white"}>
+            <PopoverArrow bg={colorMode === "dark" ? "gray.800" : "white"} />
+
+            <PopoverBody>
+              <Text fontSize="sm" fontWeight="medium">
+                Are you sure you want to remove this friend?
+              </Text>
+            </PopoverBody>
+
+            <PopoverFooter display="flex" justifyContent="flex-end" gap={2}>
+              <Button size="sm" variant="ghost">
+                Cancel
+              </Button>
+              <Button size="sm" colorScheme="red" bg="#FF5252" color={colorMode === "dark" ? "#2B2B2B" : "white"} _hover={{ opacity: 0.9 }}>
+                Remove
+              </Button>
+            </PopoverFooter>
+          </PopoverContent>
+        </Popover>
       </Flex>
 
       {/* === Avatar & User Info === */}
       <VStack spacing={2} mb={6}>
         <Box position="relative">
-          <Avatar size="xl" name="Dapsh Levi" src="/images/dina.jpg" />
-          <Box position="absolute" bottom="4px" right="10px" bg="green.400" border={`2px solid ${currentColors.layout.surface}`} boxSize="14px" borderRadius="full" />
+          <Avatar size="xl" name="Dapsh Levi" src="/images/dina.jpg" border={`1px solid ${currentColors.layout.border}`} />
+          <Box position="absolute" bottom="4px" right="10px" bg={currentColors.accent.blue} border={`2px solid ${currentColors.layout.surface}`} boxSize="14px" borderRadius="full" />
         </Box>
         <Text fontWeight="bold" fontSize="lg" color={currentColors.text.primary}>
           Dapsh Levi
         </Text>
-        <HStack spacing={4}>
-          <Icon as={FaGlobe} boxSize={4} color={currentColors.text.secondary} />
-          <Icon as={FaInstagram} boxSize={4} color={currentColors.text.secondary} />
-          <Icon as={FaTwitter} boxSize={4} color={currentColors.text.secondary} />
-        </HStack>
+        <Text fontSize="sm" color={currentColors.text.secondary} textAlign="center" px={4}>
+          Product designer @ASPCreative • Coffee nerd • Always sketching
+        </Text>
       </VStack>
 
       <Divider mb={4} />
@@ -89,6 +128,11 @@ export default function ContactDetails() {
           </HStack>
         ))}
       </VStack>
+      <Box mt={4} pt={4}>
+        <Button w="100%" colorScheme="green" bg={currentColors.accent.blue} color={colorMode === "dark" ? "#2B2B2B" : "white"} _hover={{ opacity: 0.9 }}>
+          Clear History
+        </Button>
+      </Box>
     </Flex>
   );
 }

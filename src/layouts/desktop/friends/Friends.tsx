@@ -1,11 +1,11 @@
-import ContactDetails from "../home/ContactDetails";
+import FriendDetails from "./FriendDetails";
 import FriendsList from "./FriendsList";
 
 export default function Friends() {
   return (
     <>
       <FriendsList />
-      <ContactDetails />
+      <FriendDetails />
     </>
   );
 }
