@@ -11,5 +11,11 @@ export const router = createBrowserRouter([
   {
     path: "/app",
     element: <Application />,
+    children: [
+      {
+        path: "chat/:id",
+        element: <></>,
+      },
+    ],
   },
 ]);

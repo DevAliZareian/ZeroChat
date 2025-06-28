@@ -5,7 +5,7 @@ import { FiSearch } from "react-icons/fi";
 import { IoIosSend, IoMdSend } from "react-icons/io";
 import colors from "@/theme/colors";
 
-export default function ChatRoom() {
+export default function ChatRoom({ chatId }: { chatId: any }) {
   const { colorMode } = useColorMode();
   const currentColors = colorMode === "light" ? colors.light : colors.dark;
   return (
@@ -19,7 +19,7 @@ export default function ChatRoom() {
           </InputLeftElement>
 
           <Input
-            placeholder="Search friends"
+            placeholder="Search in chat"
             variant="filled"
             bg={currentColors.layout.surface}
             _hover={{ bg: currentColors.layout.surface }}
