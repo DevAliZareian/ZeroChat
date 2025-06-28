@@ -1,4 +1,5 @@
-import { Box, Button, FormControl, FormErrorMessage, Input, VStack, Text, Center, Heading } from "@chakra-ui/react";
+import colors from "@/theme/colors";
+import { Box, Button, FormControl, FormErrorMessage, Input, VStack, Text, Center, Heading, useColorMode } from "@chakra-ui/react";
 import { Formik, Field, Form } from "formik";
 import { motion } from "framer-motion";
 import * as Yup from "yup";
@@ -11,11 +12,13 @@ const LoginSchema = Yup.object({
 const MotionBox = motion(Box);
 
 export default function AuthPage() {
+  const { colorMode } = useColorMode();
+  const currentColors = colorMode === "light" ? colors.light : colors.dark;
   return (
     <Box minH="100vh" bg="layout.background">
       <Center minH="100vh" px={4}>
         <MotionBox w="100%" maxW={{ base: "300px", md: "360px" }} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease: "easeOut" }}>
-          <Heading size="lg" mb={6} textAlign="center" color="accent.blue" fontWeight="extrabold">
+          <Heading size="lg" mb={6} textAlign="center" color={currentColors.accent.blue} fontWeight="extrabold">
             Welcome to ZeroChat
           </Heading>
           <Formik
@@ -31,7 +34,7 @@ export default function AuthPage() {
                   <Field name="email">
                     {({ field }: any) => (
                       <FormControl isInvalid={!!errors.email && touched.email}>
-                        <Input {...field} type="email" placeholder="Email" variant="filled" _focus={{ borderColor: "accent.blue", bg: "white" }} />
+                        <Input {...field} type="email" placeholder="Email" variant="filled" _focus={{ borderColor: currentColors.accent.blue, bg: currentColors.layout.background }} />
                         <FormErrorMessage>{errors.email}</FormErrorMessage>
                       </FormControl>
                     )}
@@ -40,7 +43,7 @@ export default function AuthPage() {
                   <Field name="password">
                     {({ field }: any) => (
                       <FormControl isInvalid={!!errors.password && touched.password}>
-                        <Input {...field} type="password" placeholder="Password" variant="filled" _focus={{ borderColor: "accent.blue", bg: "white" }} />
+                        <Input {...field} type="password" placeholder="Password" variant="filled" _focus={{ borderColor: currentColors.accent.blue, bg: currentColors.layout.background }} />
                         <FormErrorMessage>{errors.password}</FormErrorMessage>
                       </FormControl>
                     )}
@@ -49,12 +52,12 @@ export default function AuthPage() {
                   <Button
                     type="submit"
                     color="white"
-                    bgColor="accent.blue"
+                    bgColor={currentColors.accent.blue}
                     isLoading={isSubmitting}
                     w="full"
                     mt={2}
                     _hover={{
-                      bg: "text.links", // custom color or darker shade
+                      bg: currentColors.text.links,
                       transform: "translateY(-1px)",
                       boxShadow: "md",
                     }}

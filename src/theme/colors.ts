@@ -26,7 +26,7 @@ const colors = {
       background: "#1a1a1a",
       surface: "#2a2a2a",
       border: "#444444",
-      sidebar: "#1e1e1e",
+      sidebar: "#2a2a2a",
     },
     text: {
       primary: "#f1f1f1",
@@ -40,7 +40,7 @@ const colors = {
     },
     accent: {
       blue: "#6D73D6ff",
-      deactive: "#5F638Fff",
+      deactive: "#4A4B5F",
     },
   },
 };

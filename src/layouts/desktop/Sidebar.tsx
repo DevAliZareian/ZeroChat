@@ -2,6 +2,7 @@ import { Box, VStack, IconButton, useColorMode } from "@chakra-ui/react";
 import { FiSettings } from "react-icons/fi";
 import { FaMessage, FaBookmark, FaUser } from "react-icons/fa6";
 import colors from "@/theme/colors";
+import { HiUserGroup } from "react-icons/hi2";
 import { useSidebarStore } from "@/store/useSidebarStore";
 
 export default function Sidebar() {
@@ -15,7 +16,7 @@ export default function Sidebar() {
   const inactiveIconColor = currentColors.accent.deactive;
 
   return (
-    <Box w="80px" h="100vh" bg={currentColors.layout.sidebar} display="flex" flexDirection="column" alignItems="center" py={4}>
+    <Box w="80px" h="100vh" bg={currentColors.layout.sidebar} borderRight={`1px solid ${currentColors.layout.border}`} display="flex" flexDirection="column" alignItems="center" py={4}>
       <VStack spacing={4} flex={1}>
         <IconButton
           icon={<FaMessage />}
@@ -26,7 +27,7 @@ export default function Sidebar() {
           color={activeSection === "chats" ? activeIconColor : inactiveIconColor}
           _hover={{ color: activeIconColor }}
         />
-        <IconButton
+        {/* <IconButton
           icon={<FaBookmark />}
           aria-label="Bookmarks"
           variant="ghost"
@@ -34,14 +35,14 @@ export default function Sidebar() {
           onClick={() => setActiveSection("bookmarks")}
           color={activeSection === "bookmarks" ? activeIconColor : inactiveIconColor}
           _hover={{ color: activeIconColor }}
-        />
+        /> */}
         <IconButton
-          icon={<FaUser />}
-          aria-label="Contacts"
+          icon={<HiUserGroup />}
+          aria-label="Friends"
           variant="ghost"
           fontSize="24px"
-          onClick={() => setActiveSection("contacts")}
-          color={activeSection === "contacts" ? activeIconColor : inactiveIconColor}
+          onClick={() => setActiveSection("friends")}
+          color={activeSection === "friends" ? activeIconColor : inactiveIconColor}
           _hover={{ color: activeIconColor }}
         />
       </VStack>

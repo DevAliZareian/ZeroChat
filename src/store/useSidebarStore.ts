@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-type Section = "chats" | "bookmarks" | "contacts" | "settings";
+type Section = "chats" | "bookmarks" | "friends" | "settings";
 
 interface SidebarState {
   activeSection: Section;

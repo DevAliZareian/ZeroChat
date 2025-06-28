@@ -8,7 +8,7 @@ export default function ContactDetails() {
   const { colorMode } = useColorMode();
   const currentColors = colorMode === "light" ? colors.light : colors.dark;
   return (
-    <Flex direction="column" w="300px" h="100vh" borderLeft="1px solid" borderColor={currentColors.layout.border} bg={currentColors.layout.surface} px={4} py={6} overflowY="auto">
+    <Flex direction="column" w="340px" h="100vh" borderLeft="1px solid" borderColor={currentColors.layout.border} bg={currentColors.layout.surface} px={4} py={6} overflowY="auto">
       {/* === Date & Notification === */}
       <Flex justify="space-between" align="center" mb={8}>
         <Text fontSize="sm" color={currentColors.text.secondary}>
@@ -21,7 +21,7 @@ export default function ContactDetails() {
       <VStack spacing={2} mb={6}>
         <Box position="relative">
           <Avatar size="xl" name="Dapsh Levi" src="/images/dina.jpg" />
-          <Box position="absolute" bottom="4px" right="10px" bg="green.400" border="2px solid white" boxSize="14px" borderRadius="full" />
+          <Box position="absolute" bottom="4px" right="10px" bg="green.400" border={`2px solid ${currentColors.layout.surface}`} boxSize="14px" borderRadius="full" />
         </Box>
         <Text fontWeight="bold" fontSize="lg" color={currentColors.text.primary}>
           Dapsh Levi

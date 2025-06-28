@@ -37,7 +37,7 @@ export default function AppLoader() {
 
   return (
     <Fade in={visible} unmountOnExit>
-      <Center h="100vh" bg="white">
+      <Center h="100vh" bg="layout.background">
         <VStack spacing={0}>
           <Box w="260px">
             <Lottie animationData={AnimationLoader} loop autoplay />

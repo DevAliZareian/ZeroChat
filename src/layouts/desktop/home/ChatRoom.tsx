@@ -9,7 +9,7 @@ export default function ChatRoom() {
   const { colorMode } = useColorMode();
   const currentColors = colorMode === "light" ? colors.light : colors.dark;
   return (
-    <Flex direction="column" h="100vh" flex="1" bg={currentColors.layout.background} borderRight="1px solid" borderColor={currentColors.layout.border}>
+    <Flex direction="column" h="100vh" flex="1" bg={currentColors.layout.background} borderColor={currentColors.layout.border}>
       {/* ===== HEADER ===== */}
       <Box px={6} py={4} borderBottom="1px solid" borderColor={currentColors.layout.border}>
         {/* === Search Input === */}
@@ -26,7 +26,6 @@ export default function ChatRoom() {
             _focus={{
               bg: currentColors.layout.surface,
               borderColor: currentColors.accent.blue,
-              boxShadow: `0 0 0 1px ${currentColors.accent.blue}`,
             }}
             borderRadius="full"
             size="md"
@@ -63,22 +62,22 @@ export default function ChatRoom() {
       </VStack>
 
       {/* ===== MESSAGE INPUT ===== */}
-      <HStack px={6} py={4} mb={2} borderTop="1px solid" borderColor={currentColors.layout.border}>
+      <HStack px={6} py={6} borderTop="1px solid" borderColor={currentColors.layout.border}>
         <InputGroup>
           <Input
             placeholder="Type your message"
             variant="filled"
             bg={currentColors.layout.surface}
+            _hover={{ bg: currentColors.layout.surface }}
             _focus={{
               borderColor: currentColors.accent.blue,
-              boxShadow: `0 0 0 1px ${currentColors.accent.blue}`,
               bg: currentColors.layout.surface,
             }}
             color={currentColors.text.primary}
             borderRadius="full"
             border="1px solid"
             borderColor={currentColors.layout.border}
-            pr="3rem" // space for the icon inside input
+            pr="3rem"
           />
 
           <InputRightElement width="3rem">

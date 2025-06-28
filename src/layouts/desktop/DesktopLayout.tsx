@@ -1,16 +1,19 @@
-import { Grid, Box } from "@chakra-ui/react";
+import { Grid } from "@chakra-ui/react";
 import Sidebar from "./Sidebar";
-import Contacts from "./Contacts";
-import ChatRoom from "./ChatRoom";
-import ContactDetails from "./ContactDetails";
+import Home from "./home/Home";
+import { useSidebarStore } from "@/store/useSidebarStore";
+import Settings from "./settings/Settings";
+import Friends from "./friends/Friends";
 
 export default function DesktopLayout() {
+  const activeSection = useSidebarStore((s) => s.activeSection);
+  const columns = activeSection === "chats" ? "80px 300px 1fr 340px" : activeSection === "friends" ? "80px 1fr 340px" : "80px 1fr";
   return (
-    <Grid templateColumns="80px 300px 1fr 320px" h="100vh" w="100%" overflow="hidden" bg="layout.background">
+    <Grid templateColumns={columns} h="100vh" w="100%" overflow="hidden" bg="layout.background">
       <Sidebar />
-      <Contacts />
-      <ChatRoom />
-      <ContactDetails />
+      {activeSection === "chats" && <Home />}
+      {activeSection === "friends" && <Friends />}
+      {activeSection === "settings" && <Settings />}
     </Grid>
   );
 }
