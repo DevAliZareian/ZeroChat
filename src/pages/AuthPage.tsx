@@ -51,7 +51,7 @@ export default function AuthPage() {
 
                   <Button
                     type="submit"
-                    color="white"
+                    color={colorMode === "dark" ? "#2B2B2B" : "white"}
                     bgColor={currentColors.accent.blue}
                     isLoading={isSubmitting}
                     w="full"

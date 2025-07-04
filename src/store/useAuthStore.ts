@@ -9,10 +9,27 @@ type AuthState = {
   logout: () => void;
 };
 
-export const useAuthStore = create<AuthState>((set) => ({
-  token: null,
-  user: null,
-  setToken: (token) => set({ token }),
-  setUser: (user) => set({ user }),
-  logout: () => set({ token: null, user: null }),
-}));
+const TOKEN_KEY = "auth_token";
+
+export const useAuthStore = create<AuthState>((set) => {
+  const storedToken = localStorage.getItem(TOKEN_KEY);
+
+  return {
+    token: storedToken || null,
+    user: null,
+
+    setToken: (token) => {
+      localStorage.setItem(TOKEN_KEY, token);
+      set({ token });
+    },
+
+    setUser: (user) => {
+      set({ user });
+    },
+
+    logout: () => {
+      localStorage.removeItem(TOKEN_KEY);
+      set({ token: null, user: null });
+    },
+  };
+});

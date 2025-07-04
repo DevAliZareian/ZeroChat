@@ -1,9 +1,32 @@
 import colors from "@/theme/colors";
-import { Box, Input, InputGroup, InputLeftElement, Text, VStack, HStack, Avatar, IconButton, Button, useColorModeValue, useColorMode, Heading, Flex, useDisclosure } from "@chakra-ui/react";
+import {
+  Box,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  Text,
+  VStack,
+  HStack,
+  Avatar,
+  IconButton,
+  Button,
+  useColorModeValue,
+  useColorMode,
+  Heading,
+  Flex,
+  useDisclosure,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverArrow,
+  PopoverBody,
+} from "@chakra-ui/react";
 import { BsChat } from "react-icons/bs";
 import { FiSearch } from "react-icons/fi";
 import { HiOutlineDotsVertical } from "react-icons/hi";
 import { AddFriendDialog } from "./AddFriendDialog";
+import { HiOutlineSpeakerXMark } from "react-icons/hi2";
+import { MdBlock } from "react-icons/md";
 
 const mockFriends = [
   { name: "Dapsh Levi", status: "offline", avatar: "", id: 1 },
@@ -39,9 +62,6 @@ const friendRequests: FriendRequest[] = [
 
 export default function FriendsList() {
   const { colorMode } = useColorMode();
-  const inputBg = useColorModeValue("#f1f1f1", "gray.800");
-  const sectionBg = useColorModeValue("gray.50", "gray.850");
-  const borderColor = useColorModeValue("gray.200", "gray.700");
   const textSecondary = useColorModeValue("gray.600", "gray.400");
   const currentColors = colorMode === "light" ? colors.light : colors.dark;
 
@@ -112,7 +132,25 @@ export default function FriendsList() {
               </HStack>
               <HStack>
                 <IconButton size="sm" icon={<BsChat />} aria-label="Chat" variant="ghost" />
-                <IconButton size="sm" icon={<HiOutlineDotsVertical />} aria-label="More" variant="ghost" />
+
+                <Popover placement="left-start" isLazy>
+                  <PopoverTrigger>
+                    <IconButton size="sm" icon={<HiOutlineDotsVertical />} aria-label="More" variant="ghost" />
+                  </PopoverTrigger>
+                  <PopoverContent w="150px">
+                    <PopoverArrow />
+                    <PopoverBody>
+                      <VStack align="stretch" spacing={1}>
+                        <Button variant="ghost" size="sm" justifyContent="flex-start" leftIcon={<HiOutlineSpeakerXMark size={16} />}>
+                          Mute
+                        </Button>
+                        <Button variant="ghost" size="sm" justifyContent="flex-start" leftIcon={<MdBlock size={16} />}>
+                          Block
+                        </Button>
+                      </VStack>
+                    </PopoverBody>
+                  </PopoverContent>
+                </Popover>
               </HStack>
             </HStack>
           ))}
