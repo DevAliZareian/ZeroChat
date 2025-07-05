@@ -1,19 +1,53 @@
+import { PATHS } from "@/config/paths";
+import { useLogin } from "@/hooks/useLogin";
 import colors from "@/theme/colors";
-import { Box, Button, FormControl, FormErrorMessage, Input, VStack, Text, Center, Heading, useColorMode } from "@chakra-ui/react";
+import { Box, Button, FormControl, FormErrorMessage, Input, VStack, Text, Center, Heading, useColorMode, useToast } from "@chakra-ui/react";
 import { Formik, Field, Form } from "formik";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 
 const LoginSchema = Yup.object({
-  email: Yup.string().email("Invalid email"),
-  password: Yup.string().min(6, "Minimum 6 characters"),
+  email: Yup.string().email("Invalid email").required("Email is required"),
+  password: Yup.string().min(6, "Minimum 6 characters").required("Password is required"),
 });
 
 const MotionBox = motion(Box);
 
 export default function AuthPage() {
+  const navigate = useNavigate();
+  const toast = useToast();
   const { colorMode } = useColorMode();
+
+  const { mutateAsync: login } = useLogin();
+
+  const handleSubmit = async (values: { email: string; password: string }, actions: any) => {
+    try {
+      const result = await login({
+        username: values.email,
+        password: values.password,
+      });
+
+      actions.setSubmitting(false);
+
+      if (result?.access_token) {
+        navigate(PATHS.app);
+      }
+    } catch (err: any) {
+      toast({
+        title: "Login failed",
+        description: err.response.statusText || "Something went wrong",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+      });
+      actions.setSubmitting(false);
+    }
+  };
+
   const currentColors = colorMode === "light" ? colors.light : colors.dark;
+
   return (
     <Box minH="100vh" bg="layout.background">
       <Center minH="100vh" px={4}>
@@ -21,14 +55,8 @@ export default function AuthPage() {
           <Heading size="lg" mb={6} textAlign="center" color={currentColors.accent.blue} fontWeight="extrabold">
             Welcome to ZeroChat
           </Heading>
-          <Formik
-            initialValues={{ email: "", password: "" }}
-            validationSchema={LoginSchema}
-            onSubmit={(values) => {
-              console.log(values);
-            }}
-          >
-            {({ errors, touched, isSubmitting }) => (
+          <Formik initialValues={{ email: "", password: "" }} validationSchema={LoginSchema} onSubmit={(values, actions) => handleSubmit(values, actions)}>
+            {({ errors, touched, isSubmitting, isValid, dirty }) => (
               <Form>
                 <VStack spacing={4} align="stretch">
                   <Field name="email">
@@ -54,6 +82,7 @@ export default function AuthPage() {
                     color={colorMode === "dark" ? "#2B2B2B" : "white"}
                     bgColor={currentColors.accent.blue}
                     isLoading={isSubmitting}
+                    isDisabled={!isValid || !dirty}
                     w="full"
                     mt={2}
                     _hover={{

@@ -6,6 +6,54 @@ import { IoIosCloseCircleOutline, IoIosSend, IoMdClose, IoMdSend } from "react-i
 import colors from "@/theme/colors";
 import { useNavigate } from "react-router-dom";
 import { ImAttachment } from "react-icons/im";
+import { MessageType } from "@/types/chat";
+import { ChatMessage } from "./chat/ChatMessage";
+import { isFirstInGroup } from "@/utils/chat";
+
+export const messages: MessageType[] = [
+  {
+    id: "1",
+    text: "Hey! How are you?",
+    status: "incoming",
+    timestamp: "2025-07-05T10:00:00Z",
+  },
+  {
+    id: "2",
+    text: "Did you finish the design?",
+    status: "incoming",
+    timestamp: "2025-07-05T10:00:10Z",
+  },
+  {
+    id: "3",
+    text: "Yes, I just sent it to the client.",
+    status: "outgoing",
+    timestamp: "2025-07-05T10:01:00Z",
+  },
+  {
+    id: "4",
+    text: "Great job!",
+    status: "incoming",
+    timestamp: "2025-07-05T10:01:10Z",
+  },
+  {
+    id: "5",
+    text: "Thanks 👍",
+    status: "outgoing",
+    timestamp: "2025-07-05T10:02:00Z",
+  },
+  {
+    id: "6",
+    text: "Let me know if there's any feedback.",
+    status: "outgoing",
+    timestamp: "2025-07-05T10:02:30Z",
+  },
+  {
+    id: "7",
+    text: "Will do!",
+    status: "incoming",
+    timestamp: "2025-07-05T10:03:00Z",
+  },
+];
 
 export default function ChatRoom({ chatId }: { chatId: any }) {
   const navigate = useNavigate();
@@ -62,48 +110,10 @@ export default function ChatRoom({ chatId }: { chatId: any }) {
         </Text>
       </Box>
 
-      <VStack flex="1" px={6} py={4} spacing={4} overflowY="auto" align="stretch">
-        {/* Incoming */}
-        <Box alignSelf="flex-start" bg={currentColors.chat.incoming} px={4} py={2} borderRadius="md" maxW="75%">
-          <Text fontSize="sm" color={currentColors.text.primary}>
-            Hey Travis, would you like to grab some coffee?
-          </Text>
-        </Box>
-
-        {/* Outgoing */}
-        <Box alignSelf="flex-end" bg={currentColors.chat.outgoing} px={4} py={2} borderRadius="md" maxW="75%">
-          <Text fontSize="sm" color={currentColors.text.primary}>
-            Sure! At 11:00?
-          </Text>
-        </Box>
-
-        {/* Incoming */}
-        <Box alignSelf="flex-start" bg={currentColors.chat.incoming} px={4} py={2} borderRadius="md" maxW="75%">
-          <Text fontSize="sm" color={currentColors.text.primary}>
-            That works. Want to meet at Grounded Café?
-          </Text>
-        </Box>
-
-        {/* Outgoing */}
-        <Box alignSelf="flex-end" bg={currentColors.chat.outgoing} px={4} py={2} borderRadius="md" maxW="75%">
-          <Text fontSize="sm" color={currentColors.text.primary}>
-            Perfect. I’ll be there a few minutes early.
-          </Text>
-        </Box>
-
-        {/* Incoming */}
-        <Box alignSelf="flex-start" bg={currentColors.chat.incoming} px={4} py={2} borderRadius="md" maxW="75%">
-          <Text fontSize="sm" color={currentColors.text.primary}>
-            Awesome. I’ll grab us a window seat if I get there first.
-          </Text>
-        </Box>
-
-        {/* Outgoing */}
-        <Box alignSelf="flex-end" bg={currentColors.chat.outgoing} px={4} py={2} borderRadius="md" maxW="75%">
-          <Text fontSize="sm" color={currentColors.text.primary}>
-            Sounds great. See you soon!
-          </Text>
-        </Box>
+      <VStack flex="1" px={6} py={4} spacing={1} overflowY="auto" align="stretch">
+        {messages.map((msg, i) => (
+          <ChatMessage key={msg.id} message={msg.text} status={msg.status} isFirstInGroup={isFirstInGroup(messages, i)} />
+        ))}
       </VStack>
 
       {/* ===== MESSAGE INPUT ===== */}
