@@ -40,7 +40,7 @@ type FriendRequest = {
   name: string;
   email: string;
   avatar: string;
-  status: "incoming" | "sent";
+  status: "pending" | "sent";
 };
 
 const friendRequests: FriendRequest[] = [
@@ -49,7 +49,7 @@ const friendRequests: FriendRequest[] = [
     name: "Fardin",
     email: "fardin@gmail.com",
     avatar: "",
-    status: "incoming",
+    status: "pending",
   },
   {
     id: "2",
@@ -76,10 +76,10 @@ export default function FriendsList() {
               Friends
             </Heading>
 
-            {friendRequests.filter((user) => user.status === "incoming").length > 0 && (
+            {friendRequests.filter((user) => user.status === "pending").length > 0 && (
               <Text fontSize="sm" color={currentColors.accent.blue} cursor="pointer" onClick={onOpen}>
-                You have {friendRequests.filter((user) => user.status === "incoming").length} new friend request
-                {friendRequests.filter((user) => user.status === "incoming").length > 1 ? "s" : ""}
+                You have {friendRequests.filter((user) => user.status === "pending").length} new friend request
+                {friendRequests.filter((user) => user.status === "pending").length > 1 ? "s" : ""}
               </Text>
             )}
           </Flex>

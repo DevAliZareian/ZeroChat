@@ -7,6 +7,11 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 
+const devCredentials = {
+  email: "john.doe@gmail.com",
+  password: "123456",
+};
+
 const LoginSchema = Yup.object({
   email: Yup.string().email("Invalid email").required("Email is required"),
   password: Yup.string().min(6, "Minimum 6 characters").required("Password is required"),
@@ -55,7 +60,7 @@ export default function AuthPage() {
           <Heading size="lg" mb={6} textAlign="center" color={currentColors.accent.blue} fontWeight="extrabold">
             Welcome to ZeroChat
           </Heading>
-          <Formik initialValues={{ email: "", password: "" }} validationSchema={LoginSchema} onSubmit={(values, actions) => handleSubmit(values, actions)}>
+          <Formik initialValues={devCredentials} validationSchema={LoginSchema} onSubmit={(values, actions) => handleSubmit(values, actions)}>
             {({ errors, touched, isSubmitting, isValid, dirty }) => (
               <Form>
                 <VStack spacing={4} align="stretch">
@@ -82,7 +87,7 @@ export default function AuthPage() {
                     color={colorMode === "dark" ? "#2B2B2B" : "white"}
                     bgColor={currentColors.accent.blue}
                     isLoading={isSubmitting}
-                    isDisabled={!isValid || !dirty}
+                    //isDisabled={!isValid || !dirty}
                     w="full"
                     mt={2}
                     _hover={{

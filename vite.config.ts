@@ -10,6 +10,12 @@ export default defineConfig({
         changeOrigin: true,
         secure: false,
       },
+      "/graphql": {
+        target: "https://asp.sabzp-api.ir",
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path.replace(/^\/graphql/, "/graphql"),
+      },
     },
   },
   plugins: [react(), tsconfigPaths()],

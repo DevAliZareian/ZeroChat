@@ -1,3 +1,4 @@
+import { useAddFriend } from "@/graphql/mutations/addFriend";
 import colors from "@/theme/colors";
 import {
   Box,
@@ -32,7 +33,7 @@ type FriendRequest = {
   name: string;
   email: string;
   avatar: string;
-  status: "incoming" | "sent";
+  status: "pending" | "sent";
 };
 
 interface AddFriendDialogProps {
@@ -42,11 +43,24 @@ interface AddFriendDialogProps {
 }
 
 export function AddFriendDialog({ isOpen, onClose, friendRequests }: AddFriendDialogProps) {
-  const [search, setSearch] = useState("");
   const { hasCopied, onCopy } = useClipboard(currentUserId);
+
+  const [friendIdentifier, setFriendIdentifier] = useState("");
+  const { addFriend, loading } = useAddFriend();
 
   const { colorMode } = useColorMode();
   const currentColors = colorMode === "light" ? colors.light : colors.dark;
+
+  const handleAddFriend = async () => {
+    if (!friendIdentifier) return;
+
+    try {
+      await addFriend({ variables: { addresseeSessionId: friendIdentifier } });
+      setFriendIdentifier("");
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <>
@@ -56,19 +70,29 @@ export function AddFriendDialog({ isOpen, onClose, friendRequests }: AddFriendDi
           <ModalHeader>Add New Friend</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
-            {/* Search bar */}
+            {/* Friend Identifier */}
             <Flex mb={4} gap={2}>
               <Input
                 placeholder="Enter email or user ID"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
+                value={friendIdentifier}
+                onChange={(e) => setFriendIdentifier(e.target.value)}
                 borderRadius="md"
                 bg="white"
                 color="black"
                 _placeholder={{ color: "gray.500" }}
                 flex="1"
               />
-              <Button colorScheme="blue" color={colorMode === "dark" ? "#2B2B2B" : "white"} bg={currentColors.accent.blue} borderRadius="md" px={6} fontWeight="medium">
+              <Button
+                colorScheme="blue"
+                color={colorMode === "dark" ? "#2B2B2B" : "white"}
+                bg={currentColors.accent.blue}
+                borderRadius="md"
+                px={6}
+                fontWeight="medium"
+                onClick={handleAddFriend}
+                isLoading={loading}
+                isDisabled={!friendIdentifier.trim()}
+              >
                 Send Invite
               </Button>
             </Flex>
@@ -88,7 +112,7 @@ export function AddFriendDialog({ isOpen, onClose, friendRequests }: AddFriendDi
                   </HStack>
 
                   {/* Right side actions */}
-                  {user.status === "incoming" ? (
+                  {user.status === "pending" ? (
                     <HStack spacing={2}>
                       <Button size="sm" colorScheme="green" onClick={() => console.log("accept", user.id)}>
                         Accept

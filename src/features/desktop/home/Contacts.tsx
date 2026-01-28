@@ -1,3 +1,4 @@
+import { useAuthStore } from "@/store/useAuthStore";
 import { useConversationStore } from "@/store/useConversationStore";
 import colors from "@/theme/colors";
 import { Avatar, AvatarGroup, Box, HStack, Input, InputGroup, InputLeftElement, Text, VStack, Divider, useColorMode, useClipboard, Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/react";
@@ -35,6 +36,8 @@ const conversations = [
 export default function Contacts() {
   const navigate = useNavigate();
   const { colorMode } = useColorMode();
+
+  const user = useAuthStore((state) => state.user);
 
   const { id } = useParams();
   const { selectedId, setSelectedId } = useConversationStore();
@@ -74,13 +77,13 @@ export default function Contacts() {
         {/* === USER PROFILE === */}
         <VStack spacing={2} mb={6} position="relative">
           <Box position="relative">
-            <Avatar size="xl" name="Bomb Ali" src="/avatars/user.png" border={`1px solid ${currentColors.layout.border}`} />
+            <Avatar size="xl" name={user?.username} src="/avatars/user.png" border={`1px solid ${currentColors.layout.border}`} />
 
             {/* Green online dot */}
             <Box position="absolute" bottom="4px" right="10px" boxSize="14px" bg={currentColors.accent.blue} border={`2px solid ${currentColors.layout.surface}`} borderRadius="full" />
           </Box>
 
-          <Text fontWeight="bold">Bomb Ali</Text>
+          <Text fontWeight="bold">{user?.username}</Text>
 
           <Text fontSize="sm" color={currentColors.text.secondary} textAlign="center" px={4}>
             Product designer @ASPCreative • Coffee nerd • Always sketching
