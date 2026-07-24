@@ -1,0 +1,42 @@
+version: "3.8"
+
+x-nest-env: &nest-env
+  NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+services:
+  app:
+    image: sabzp/pnpm:v2
+    entrypoint: [] # Clear the entrypoint
+    command: ["/bin/sh", "-c", "if command -v bash >/dev/null 2>&1; then bash /app/sh/start.sh; else sh /app/sh/start.sh; fi"]
+    environment:
+      <<: *nest-env
+
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+      labels:
+        - "traefik.http.routers.${APP_SERVICE_NAME}-http.entrypoints=web"
+        - "traefik.http.routers.${APP_SERVICE_NAME}-http.rule=${APP_SERVER_NAME}"
+        - "traefik.http.routers.${APP_SERVICE_NAME}-http.service=${APP_SERVICE_NAME}"
+        - "traefik.enable=true"
+        - "traefik.http.routers.${APP_SERVICE_NAME}.entrypoints=websecure"
+        - "traefik.http.services.${APP_SERVICE_NAME}.loadbalancer.server.port=${PORT}"
+        - "traefik.http.routers.${APP_SERVICE_NAME}.service=${APP_SERVICE_NAME}"
+        - "traefik.http.routers.${APP_SERVICE_NAME}.rule=${APP_SERVER_NAME}"
+        - "traefik.http.routers.${APP_SERVICE_NAME}.tls=true"
+        - "traefik.http.routers.${APP_SERVICE_NAME}.tls.certresolver=letsencrypt"
+
+    volumes:
+      - ./:/app
+      - node_modules:/app/node_modules
+      - build:/app/build
+    networks:
+      traefik_public:
+
+volumes:
+  node_modules:
+  build:
+
+networks:
+  traefik_public:
+    external: true
