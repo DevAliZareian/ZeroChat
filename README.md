@@ -2,6 +2,8 @@
 
 A full-stack real-time chat application with a **Django + Channels** backend and a **React + TypeScript** frontend. Features email-based authentication, a friend system, live messaging over WebSockets, and a polished Chakra UI interface.
 
+![UI-app](https://github.com/DevAliZareian/ZeroChat/blob/main/resources/UI-app.png)
+
 > Built to demonstrate modern real-time web architecture, clean API design, and end-to-end feature implementation.
 
 ---
@@ -34,24 +36,6 @@ A full-stack real-time chat application with a **Django + Channels** backend and
 - **Responsive three-panel chat layout** — contacts, messages, and contact details
 
 ---
-
-## Architecture
-
-```
-┌──────────────┐     HTTP (REST)      ┌──────────────────┐
-│   React App  │ ──────────────────>  │  Django REST API  │
-│  (Vite SPA)  │                      │  /api/auth/*      │
-│              │                      │  /api/friends/*   │
-│  Port 5173   │                      │  /api/chat/*      │
-│              │                      │  Port 8000        │
-│              │     WebSocket        │                   │
-│              │ ──────────────────>  │  Django Channels   │
-│              │                      │  /ws/chat/:id/    │
-│              │                      │  /ws/friends/     │
-│              │                      │  /ws/friendreq/   │
-│              │                      │  /ws/conversations/│
-└──────────────┘                      └──────────────────┘
-```
 
 ### Backend Design
 
