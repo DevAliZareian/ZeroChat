@@ -1,156 +1,97 @@
 # ZeroChat
 
-A full-stack real-time chat application with a **Django + Channels** backend and a **React + TypeScript** frontend. Features email-based authentication, a friend system, live messaging over WebSockets, and a polished Chakra UI interface.
+A real-time chat app — Django + Channels on the backend, React + TypeScript on the frontend. Email auth, a friend system, live messaging over WebSockets, Chakra UI on top.
 
 ![UI-app](https://github.com/DevAliZareian/ZeroChat/blob/main/resources/UI-app.png)
 
-> Built to demonstrate modern real-time web architecture, clean API design, and end-to-end feature implementation.
+## Stack
 
----
+**Backend:** Python 3.14, Django 6, DRF 3.17, Django Channels 4.3 + Daphne (ASGI, WebSockets), SimpleJWT, drf-spectacular for docs. SQLite in dev, Postgres-ready.
 
-## Tech Stack
-
-| Layer | Technology | Purpose |
-|-------|------------|---------|
-| **Backend** | Python 3.14, Django 6, Django REST Framework 3.17 | REST API & business logic |
-| **Real-Time** | Django Channels 4.3, Daphne 4.2, WebSockets | Live messaging & presence |
-| **Auth** | SimpleJWT (access + refresh tokens) | Stateless authentication |
-| **Frontend** | React 19, TypeScript 5.8, Vite 7 | SPA UI |
-| **UI** | Chakra UI 2.10, Framer Motion 12 | Responsive design & animations |
-| **State** | Zustand 5 + TanStack React Query 4 | Client & server state |
-| **Real-Time Client** | react-use-websocket | WebSocket integration |
-| **Database** | SQLite (dev), PostgreSQL-ready via Django ORM | Data persistence |
-| **Docs** | drf-spectacular (Swagger / ReDoc) | Auto-generated API docs |
-
----
+**Frontend:** React 19, TypeScript 5.8, Vite 7, Chakra UI + Framer Motion, Zustand for client state, TanStack Query for server state, react-use-websocket for the live layer.
 
 ## Features
 
-- **Email-based registration & login** with JWT access/refresh token flow
-- **Real-time one-on-one messaging** via Django Channels WebSocket consumers
-- **Conversation management** — create conversations, view message history, live updates
-- **Friend system** — send, accept, and reject friend requests with instant WebSocket push
-- **Live friend list** — friends and friend requests update in real time via Django signals + Channels layer
-- **Dark / light mode** with persisted preference
-- **Auto-generated API docs** at `/api/docs/` (Swagger) and `/api/redoc/` (ReDoc)
-- **Responsive three-panel chat layout** — contacts, messages, and contact details
+- Email registration/login with JWT access + refresh tokens
+- Real-time 1:1 messaging via Channels consumers
+- Conversations with message history and live updates
+- Friend requests (send/accept/reject) pushed instantly over WebSocket
+- Friend list stays in sync in real time via Django signals + the channel layer
+- Dark/light mode, persisted
+- Swagger (`/api/docs/`) and ReDoc (`/api/redoc/`) auto-generated from the API
+- Three-panel layout: contacts, messages, contact details
 
----
+## How it's built
 
-### Backend Design
+The ASGI app (`config/asgi.py`) splits traffic two ways: regular HTTP goes through Django as usual, WebSocket connections go through Channels' `URLRouter` with a custom JWT auth middleware since there's no cookie session to rely on. Each connected user joins per-user channel groups (`user_{id}_friends`, `user_{id}_conversations`), so changes broadcast via Django signals reach the right clients directly instead of everyone polling. Backend apps — `accounts`, `friends`, `chat` — are kept independent, each owning its own models, serializers, views, and consumers.
 
-- **ASGI dual protocol** — `config/asgi.py` routes HTTP through Django's WSGI handler and WebSocket connections through Channels' `URLRouter` with custom JWT authentication middleware
-- **Signal-driven real-time updates** — Django `post_save` / `post_delete` signals broadcast changes to WebSocket groups (`user_{id}_friends`, `user_{id}_conversations`), ensuring all connected clients stay in sync
-- **Per-user channel groups** — each authenticated user joins dedicated groups on WebSocket connect, allowing targeted message delivery without polling
-- **Modular Django apps** — `accounts`, `friends`, and `chat` are decoupled, each with its own models, serializers, views, consumers, and URL routing
-
-### Frontend Design
-
-- **Hybrid data fetching** — REST API for mutations (Axios + React Query) and WebSockets for real-time subscriptions (react-use-websocket)
-- **Zustand stores** for client-side state — auth tokens, selected conversation, messages cache, active sidebar section
-- **React Query mutations with optimistic updates** for friend requests and conversation creation
-- **AuthGuard wrapper** protecting all `/app/*` routes, redirecting to login when no valid JWT exists
-
----
+On the frontend, REST handles mutations (Axios + React Query, with optimistic updates for things like friend requests) while WebSockets handle live subscriptions. Zustand holds auth state, the active conversation, and message caches. An `AuthGuard` wraps `/app/*` and redirects to login if there's no valid JWT.
 
 ## Getting Started
 
-### Prerequisites
+Needs Python 3.10+, Node 18+, and optionally Redis (falls back to an in-memory channel layer without it).
 
-- Python 3.10+
-- Node.js 18+
-- Redis (optional — falls back to in-memory channel layer)
-
-### Backend
-
+**Backend:**
 ```bash
 cd server
 python -m venv venv
-# Windows: .\venv\Scripts\activate
-# Mac/Linux: source venv/bin/activate
+source venv/bin/activate  # .\venv\Scripts\activate on Windows
 pip install -r requirements.txt
 python manage.py migrate
 daphne -b 0.0.0.0 -p 8000 config.asgi:application
 ```
 
-### Frontend
-
+**Frontend:**
 ```bash
 cd client
 npm install
 npm run dev
 ```
 
-The app will be available at `http://localhost:5173`. The Vite dev server proxies `/api` and `/ws` requests to the Django backend at `http://127.0.0.1:8000`.
+App runs at `http://localhost:5173` — Vite proxies `/api` and `/ws` to the Django server on `:8000`.
 
----
+## API
 
-## API Overview
+A few of the main REST routes, all under `/api/`:
 
-### REST Endpoints
+- `auth/register/`, `auth/login/`, `auth/refresh/`, `auth/me/`
+- `friends/requests/` (send), `friends/request/<id>/status/` (accept/reject), `friends/friendship/<id>/` (remove)
+- `chat/conversation/` (create), `chat/conversation/<id>/messages/` (history)
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/auth/register/` | Create a new account |
-| POST | `/api/auth/login/` | Obtain JWT tokens |
-| POST | `/api/auth/refresh/` | Refresh access token |
-| GET | `/api/auth/me/` | Get current user |
-| POST | `/api/friends/requests/` | Send friend request |
-| PATCH | `/api/friends/request/<id>/status/` | Accept/reject request |
-| DELETE | `/api/friends/friendship/<id>/` | Remove a friend |
-| POST | `/api/chat/conversation/` | Create a conversation |
-| GET | `/api/chat/conversation/<id>/messages/` | Get message history |
+Full schema is in the Swagger docs.
 
-### WebSocket Channels
+WebSocket endpoints, authenticated via `?token=<jwt_access_token>`:
 
-| Path | Purpose |
-|------|---------|
-| `/ws/chat/<conversation_id>/` | Send & receive messages in real time |
-| `/ws/conversations/` | Live conversation list updates |
-| `/ws/friends/` | Live friend list updates |
-| `/ws/friendrequests/` | Live friend request notifications |
+- `/ws/chat/<conversation_id>/` — messages
+- `/ws/conversations/` — conversation list updates
+- `/ws/friends/` — friend list updates
+- `/ws/friendrequests/` — friend request notifications
 
-All WebSocket connections authenticate via `?token=<jwt_access_token>` query parameter.
-
----
-
-## Project Structure
+## Project Layout
 
 ```
-├── client/                  # React + TypeScript frontend
-│   └── src/
-│       ├── api/             # Axios REST client functions
-│       ├── components/      # Shared UI components
-│       ├── features/        # Page-level components & layouts
-│       ├── hooks/           # Custom React hooks (WebSocket, mutations)
-│       ├── pages/           # Route-level page components
-│       ├── router/          # React Router configuration
-│       ├── store/           # Zustand state stores
-│       └── theme/           # Chakra UI theme & colors
-│
-└── server/                  # Django backend
-    ├── config/
-    │   ├── settings.py      # Django configuration
-    │   ├── asgi.py          # ASGI entry point (HTTP + WS)
-    │   └── urls.py          # Root URL routing
-    ├── apps/
-    │   ├── accounts/        # User model & auth views
-    │   ├── friends/         # Friendship, friend requests, consumers
-    │   └── chat/            # Conversations, messages, consumers
-    └── utils/
-        └── jwt_middleware.py # WebSocket JWT authentication
+client/src/
+  api/          Axios REST functions
+  components/   Shared UI
+  features/     Page-level components & layouts
+  hooks/        Custom hooks (WebSocket, mutations)
+  pages/        Route-level pages
+  router/       React Router config
+  store/        Zustand stores
+  theme/        Chakra theme
+
+server/
+  config/       settings.py, asgi.py, urls.py
+  apps/
+    accounts/   User model & auth
+    friends/    Friendships, requests, consumers
+    chat/       Conversations, messages, consumers
+  utils/
+    jwt_middleware.py   WebSocket JWT auth
 ```
 
----
+## Notes
 
-## Development Notes
-
-- **Channel layer** defaults to `InMemoryChannelLayer` for zero-dependency development. For production, set up Redis and switch to `RedisChannelLayer` in `settings.py`.
-- **GraphQL** queries exist in the frontend but the backend serves REST-only. The API docs are auto-generated via drf-spectacular.
-- **No file upload** support yet — the UI has an attachment button placeholder, but no backend handler.
-
----
-
-## License
-
-MIT
+- Channel layer defaults to in-memory for local dev — swap to `RedisChannelLayer` in `settings.py` for production.
+- There are some leftover GraphQL queries on the frontend; the backend is REST-only, so those aren't wired up to anything.
+- File attachments aren't implemented yet — there's a button for it in the UI, but no backend handler behind it.
